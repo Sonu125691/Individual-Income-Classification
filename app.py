@@ -1,8 +1,6 @@
 import streamlit as st
 import pickle
 import pandas as pd
-import numpy as np
-import base64
 
 
 with open("final_model.pkl", "rb") as file:
@@ -105,4 +103,5 @@ if st.session_state.page == "Home":
             st.info("Income is More than 50K$")
         else:
             st.info("Income is lesser than or equals to 50K$")
+
 
