@@ -8,7 +8,7 @@ The dataset used is the **UCI Adult Income Dataset**, containing **48,842 rows**
 ## 📌 Workflow
 - Split the data into **X_train and X_test first** (to avoid data leakage)
 - Performed **EDA only on X_train** — the test data was not touched during analysis
-- Removed unuseful columns after EDA
+- Removed unwanted columns after EDA
 - Applied **OneHotEncoding** to categorical columns
 - Applied **StandardScaler** after encoding
 - Trained **6 ML models** and compared performance
