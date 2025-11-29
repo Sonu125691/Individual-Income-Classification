@@ -11,3 +11,12 @@ In this study, multiple machine learning models were tested, including Logistic 
 Decision Tree, Random Forest, Gaussian Naive Bayes, and XGBoost. After evaluation, the XGBoost Classifier achieved 
 the highest test accuracy and test f1-score(**Test accuracy** = 0.8768, **f1-score** = 0.72 for lowest Classification) 
 and it was selected as the final model for making prediction. This project has been implemented on Streamlit.
+
+## ▶️ Run the Project on Your Computer
+**To run this project locally, use the following commands in your terminal:**
+
+pip install -r requirements.txt
+
+streamlit run app.py
+
+**These commands will install the required libraries and open the BMW Sales Classification app in your browser (running locally on your computer).**
