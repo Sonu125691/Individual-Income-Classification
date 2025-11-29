@@ -2,6 +2,24 @@ import streamlit as st
 import pickle
 import pandas as pd
 import numpy as np
+import base64
+
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as file:
+        encoded = base64.b64encode(file.read()).decode()
+    css = f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/png;base64,{encoded}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
+
+add_bg_from_local("background 2.jpg")
 
 with open("final_model.pkl", "rb") as file:
     model = pickle.load(file)
@@ -18,23 +36,21 @@ if "page" not in st.session_state:
 
 if st.session_state.page == "Home":
 
-    st.image("background.png", use_container_width=True)
-
     st.sidebar.title("About this App")
     st.sidebar.info("""
     This application predicts whether an individual’s annual income is above or below $50K.  
     The prediction is based on personal and demographic factors such as age, workclass, education, marital status, 
-    occupation, relationship, gender, capital gain, capital loss, weekly working hours, and native country.  
+    occupation, relationship, capital gain, capital loss, weekly working hours, and native country.  
 
     The dataset used in this project is the well-known UCI Adult Income dataset, which contains 48,842 records 
     with 14 descriptive attributes and one target variable, *Income*. The target has two classes: "<=50K" and ">50K".  
 
     In this study, multiple machine learning models were tested, including Logistic Regression, Support Vector Classifier, 
     Decision Tree, Random Forest, Gaussian Naive Bayes, and XGBoost. After evaluation, the XGBoost Classifier achieved 
-    the highest accuracy of **87.32%**, and it was selected as the final model for making predictions in this app.  
+    the highest accuracy of **86.66%**,and it was selected as the final model for making predictions in this app.  
     """)
   
-    st.title("Adult Income Prediction")
+    st.title("Individual's Income Prediction")
     
     age = st.slider("Select Age", 0, 100, 25)
 
@@ -55,10 +71,8 @@ if st.session_state.page == "Home":
     
     relationship = st.selectbox("Relationship", ['Own-child', 'Husband', 'Not-in-family', 'Unmarried', 'Wife',
        'Other-relative'])
-    
-    gender = st.selectbox("Gender", ['Male','Female'])
 
-    capital_gain = st.number_input("Capital Gain", 0, 1000000, 0)
+    capital_gain = st.number_input("Capital Gain", 0, 1000000, 1000)
 
     capital_loss = st.number_input("Capital Loss", 0, 1000000, 0)
 
@@ -82,7 +96,6 @@ if st.session_state.page == "Home":
         "marital-status": marital_status,
         "occupation": occupation,
         "relationship": relationship,
-        "gender": gender,
         "capital-gain": capital_gain,	
         "capital-loss": capital_loss,
         "hours-per-week": hours_per_week,
@@ -93,20 +106,18 @@ if st.session_state.page == "Home":
     
     if st.button("Predict"):
 
-        user_df = encoder.transform(user_df)
+        obj_columns = ["workclass","education","marital-status","occupation","relationship","native-country"]
+        encoded = encoder.transform(user_df[obj_columns])
+        encoded = pd.DataFrame(encoded, columns = encoder.get_feature_names_out(obj_columns))
 
-        user_df = scaler.transform(user_df)
+        user_df = user_df.drop(columns = obj_columns)
+        final = pd.concat([user_df, encoded], axis = 1)
 
-        prediction = model.predict(user_df)
+        final = scaler.transform(final)
+
+        prediction = model.predict(final)
 
         if prediction[0] == 1:
-            st.info("Predicted Income is More than 50K$")
+            st.info("Income is More than 50K$")
         else:
-            st.info("Predicted Income is lesser than or equals to 50K$")
-
-    
-
-
-    
-
-
+            st.info("Income is lesser than or equals to 50K$")
