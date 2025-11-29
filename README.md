@@ -9,4 +9,4 @@ with 14 descriptive attributes and one target variable, *Income*. The target has
 
 In this study, multiple machine learning models were tested, including Logistic Regression, Support Vector Classifier, 
 Decision Tree, Random Forest, Gaussian Naive Bayes, and XGBoost. After evaluation, the XGBoost Classifier achieved 
-the highest accuracy of **87.32%**, and it was selected as the final model for making predictions in this app. 
+the highest test accuracy and test f1-score(**Test accuracy** = 0.8768, **f1-score** = 0.72) and it was selected as the final model for making predictions in this app. 
