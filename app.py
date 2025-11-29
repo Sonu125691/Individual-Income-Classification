@@ -4,22 +4,6 @@ import pandas as pd
 import numpy as np
 import base64
 
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as file:
-        encoded = base64.b64encode(file.read()).decode()
-    css = f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/png;base64,{encoded}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }}
-    </style>
-    """
-    st.markdown(css, unsafe_allow_html=True)
-
-add_bg_from_local("background 2.jpg")
 
 with open("final_model.pkl", "rb") as file:
     model = pickle.load(file)
@@ -121,3 +105,4 @@ if st.session_state.page == "Home":
             st.info("Income is More than 50K$")
         else:
             st.info("Income is lesser than or equals to 50K$")
+
